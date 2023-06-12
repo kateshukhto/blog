@@ -1,1 +1,54 @@
-<p>login-page works!</p>
+<form class="card" [formGroup]="form" (ngSubmit)="submit()">
+  <h2>Войди в админ панель</h2>
+
+  <div class="alert alert-danger" *ngIf="auth.error$ | async as error">
+    {{error}}
+  </div>
+
+  <div class="alert alert-light" *ngIf="message">
+    {{message}}
+  </div>
+  <div
+    class="form-control"
+    [ngClass]="{invalid: email.touched && email.invalid}"
+  >
+    <label for="email">Email</label>
+    <input type="email" id="email" formControlName="email"/>
+    <div
+      class="validation"
+      *ngIf="email.touched && email.invalid"
+    >
+      <small *ngIf="email.errors?.['required']">Введите email</small>
+      <small *ngIf="email.errors?.['email']">Email не валидный </small>
+    </div>
+  </div>
+
+  <div
+    class="form-control"
+    [ngClass]="{invalid: password.touched && password.invalid}"
+  >
+    <label for="email">Password</label>
+    <input type="password" id="password" formControlName="password"/>
+    <div
+      class="validation"
+      *ngIf="password.touched && password.invalid"
+    >
+      <small
+        *ngIf="password.errors?.['required']"
+      >Введите пароль
+      </small>
+
+      <small
+        *ngIf="password.errors?.['minlength']"
+      >
+        Пароль должен быть не менее {{password.errors?.['minlength']['requiredLength']}} символов
+      </small>
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="this.form.invalid || this.submitted"
+  >Войти</button>
+</form>
